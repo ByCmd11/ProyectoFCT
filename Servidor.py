@@ -22,7 +22,7 @@ def broadcast(mensaje, _cliente):
             cliente.send(mensaje)
 
 
-def handle_messages(cliente):
+def mensajeria(cliente):
     while True:
         try:
             mensaje = cliente.recv(1024)
@@ -38,11 +38,10 @@ def handle_messages(cliente):
             break
 
 
-def receive_connections():
+def recibir_conexiones():
     while True:
         cliente, direccion = server.accept()
 
-        
         nombre = cliente.recv(1024).decode('utf-8')
 
         clientes.append(cliente)
@@ -54,8 +53,8 @@ def receive_connections():
         broadcast(mensaje,  cliente)
         cliente.send("Se ha conectado al servidor".encode("utf-8"))
 
-        thread = threading.Thread(target=handle_messages, args=(cliente,))
+        thread = threading.Thread(target=mensajeria, args=(cliente,))
         thread.start()
 
 
-receive_connections()
+recibir_conexiones()
